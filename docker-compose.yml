@@ -1,0 +1,31 @@
+version: "3.9"
+services:
+  mongo:
+    image: mongo:6
+    container_name: mongo
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+  jd-service:
+    build: ./jdservice
+    container_name: jd-service
+    depends_on:
+      - mongo
+    ports:
+      - "3001:3001"
+
+  applicant-service:
+    build: ./applicant-service
+    container_name: applicant-service
+    depends_on:
+      - mongo
+    ports:
+      - "3002:3002"
+
+  nginx:
+    image: nginx:alpine
+    container_name: nginx
+    ports:
+      - "8080:80"
